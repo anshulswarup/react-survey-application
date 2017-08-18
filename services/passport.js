@@ -18,7 +18,8 @@ passport.use(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback' // User will be redirected to this URL once it grants persmission
+      callbackURL: '/auth/google/callback', // User will be redirected to this URL once it grants persmission
+      proxy: true
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ googleId: profile.id }).then(existingUser => {
