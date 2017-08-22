@@ -21,18 +21,29 @@ passport.use(
       callbackURL: '/auth/google/callback', // User will be redirected to this URL once it grants persmission
       proxy: true
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          done(null, existingUser);
-          //We already have a record with a given profile id
-        } else {
-          //We don't have a user with this Id, make a new record
-          new User({ googleId: profile.id })
-            .save()
-            .done(user => done(null, user));
-        }
-      });
+    // (accessToken, refreshToken, profile, done) => {
+    //   User.findOne({ googleId: profile.id }).then(existingUser => {
+    //     if (existingUser) {
+    //       done(null, existingUser);
+    //       //We already have a record with a given profile id
+    //     } else {
+    //       //We don't have a user with this Id, make a new record
+    //       new User({ googleId: profile.id })
+    //         .save()
+    //         .done(user => done(null, user));
+    //     }
+    //   });
+    // }
+
+    //Equivalent function in async funtion
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
+
+      if (existingUser) {
+        return done(null, existingUser);
+      }
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
