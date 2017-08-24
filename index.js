@@ -5,6 +5,7 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 require('./models/User');
+require('./models/Survey');
 require('./services/passport'); // We use this to ensure passport.js file is executed once
 
 mongoose.connect(keys.mongoURI);
@@ -22,8 +23,10 @@ app.use(
 //Tell passport to use cookies
 app.use(passport.initialize());
 app.use(passport.session());
+
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 //Handing React Routes in production
 
